@@ -74,6 +74,14 @@ def get_showtimes(title, location):
 def buy_ticket(theater, movie, showtime):
     return f"Ticket purchased for {movie} at {theater} for {showtime}."
 
+def confirm_ticket_purchase(theater, movie, showtime):
+    confirmation_message = f"Please confirm the following ticket purchase details:\n\n" \
+                           f"Theater: {theater}\n" \
+                           f"Movie: {movie}\n" \
+                           f"Showtime: {showtime}\n\n" \
+                           f"Is this information correct? (Yes/No)"
+    return confirmation_message
+    
 def get_reviews(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}/reviews?language=en-US&page=1"
     headers = {
