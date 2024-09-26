@@ -104,8 +104,16 @@ async def on_message(message: cl.Message):
             if hasattr(movie_functions, function_name):
                 function_to_call = getattr(movie_functions, function_name)
                 
-                expected_args = inspect.signature(function_to_call).parameters.keys()
-                adjusted_args = {k: v for k, v in function_args.items() if k in expected_args}
+                expected_args = list(inspect.signature(function_to_call).parameters.keys())
+                adjusted_args = {}
+                for k, v in function_args.items():
+                    if k in expected_args:
+                        adjusted_args[k] = v
+                    else:
+                        print(f"Unexpected argument: {k}")
+                print(f"Expected arguments: {expected_args}")
+                print(f"Adjusted arguments: {adjusted_args}")
+
                 
                 try:
                     if inspect.iscoroutinefunction(function_to_call):
@@ -118,6 +126,12 @@ async def on_message(message: cl.Message):
                         "name": function_name,
                         "content": function_response
                     })
+
+                    if function_name.__eq__("buy_ticket"):
+                       message_history.append({
+                           "role": "system",
+                           "content": "Show user the ticket details and Confirm the details with the user before purchasing the ticket"
+                       }) 
                 except Exception as e:
                     error_message = f"Error calling function {function_name}: {str(e)}"
                     message_history.append({
